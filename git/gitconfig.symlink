@@ -1,6 +1,6 @@
 [user]
-	name = Kristian Glass
-	email = git@doismellburning.co.uk
+	name = Mike Cripps
+	email = mike.cripps@footballradar.com
 [color]
 	diff = auto
 	status = auto
@@ -15,4 +15,4 @@
 [core]
 	excludesfile = ~/.gitignore_global
 [push]
-	default = matching
+	default = nothing
