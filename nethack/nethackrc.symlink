@@ -1,2 +1,1266 @@
-OPTIONS=showexp,showscore,time,color,noautopickup,disclose:+i +a yv yg yc,pickup_burden:S
-OPTIONS=autodig,fruit:slime mold,boulder:0
+# Pretty much an exact copy of stth's nhrc
+# http://alt.org/nethack/userdata/s/stth/stth.nh343rc
+#
+# Any changes will be clearly marked!
+
+# [AI]: Use this account for JuNetHack competition
+# junethack AgentIcarus
+
+# [AI]: Autocomplete 'save' and don't autocomplete 'quit'
+AUTOCOMPLETE=save,!quit
+
+#
+#  Section overview:
+#
+#    - NAO patches      [ NAO /     ]  (incl. DUNGEONCOLORs and MONSTERCOLORs)
+#    - common patches   [ NAO / NEU ]  (incl. use_darkgray)
+#    - Curses GUI       [ NAO /     ]
+#    - MENUCOLORs       [ NAO / NEU ]
+#    - STATUSCOLORs     [ NAO / NEU ]
+#    - vanilla options  [ NAO / NEU ]
+#    - MSGTYPEs         [ NAO /     ]
+#
+
+###############################################################################
+
+#
+#  NAO patches
+#  ===========
+#
+
+#  differences to vanilla ... http://alt.org/nethack/naonh.php
+#  default config file ...... http://alt.org/nethack/default.nh343rc
+
+#  MOTD/news 2012.05.31
+OPTIONS=!apexception_regex
+
+#  http://alt.org/nethack/forum/read.php?1,267
+OPTIONS=bones
+
+#  MOTD/news 2012.05.15
+OPTIONS=botl_updates
+
+#  http://bilious.alt.org/?433
+OPTIONS=hilite_hidden_stairs
+OPTIONS=hilite_obj_piles
+
+#  http://bilious.alt.org/?192
+OPTIONS=hitpointbar
+
+#  MOTD/news 2012.05.15
+OPTIONS=hp_notify
+#  sync this with "MSGTYPEs -> hp_notify healing"
+#  (to suppress annoying "HP increased" messages)
+OPTIONS=hp_notify_fmt:[HP:%H(%c%a)]
+
+#  http://alt.org/nethack/naonh.php
+OPTIONS=item_use_menu
+
+#  MOTD/news 2012.10.21
+OPTIONS=menu_glyphs
+
+#  MOTD/news 2012.05.31
+OPTIONS=!msgtype_regex
+
+#  MOTD/news 2012.10.21
+OPTIONS=!msg_wall_hits
+
+#  MOTD/news 2011.10.09
+OPTIONS=!old_C_behaviour
+
+#  http://bilious.alt.org/?44
+OPTIONS=paranoid_hit
+OPTIONS=paranoid_quit
+OPTIONS=paranoid_remove
+
+#  http://bilious.alt.org/?98
+OPTIONS=pickup_thrown
+
+#  http://bilious.alt.org/?287
+OPTIONS=quiver_fired
+
+#  http://bilious.alt.org/?43
+OPTIONS=showborn
+
+#  http://bilious.alt.org/?198
+OPTIONS=showbuc
+
+#  http://bilious.alt.org/?15
+OPTIONS=show_obj_sym
+
+#  MOTD/news 2012.05.31
+OPTIONS=show_shop_prices
+
+#  http://bilious.alt.org/?42
+OPTIONS=sortloot:loot
+
+#  http://alt.org/nethack/forum/read.php?6,334
+OPTIONS=!vt_tiledata
+
+#  http://bilious.alt.org/?14
+OPTIONS=!win_edge
+
+#------------------------------------------------------------------------------
+
+#
+#  DUNGEONCOLORs
+#  =============
+#
+
+#  http://bilious.alt.org/?17
+#
+#  colors:  0  black     4  blue        8  "no color"    12  lightblue
+#           1  red       5  magenta     9  orange        13  lightmagenta
+#           2  green     6  cyan       10  lightgreen    14  lightcyan
+#           3  brown     7  gray       11  yellow        15  white
+#
+#           (black is blue or dark gray, depending on "use_darkgray" option)
+#
+#  DUNGEONCOLOR order:
+#    solid rock / vertical wall / horizontal wall / upper left corner / upper
+#    right corner / lower left corner / lower right corner / cross wall /
+#    upward T wall / downward T wall / leftward T wall / rightward T wall / no
+#    door / vertical open door / horizontal open door / vertical closed door /
+#    horizontal closed door / iron bars / tree / floor of a room / dark
+#    corridor / lit corridor / stairs up / stairs down / ladder up / ladder
+#    down / altar / grave / throne / kitchen sink / fountain / pool or moat /
+#    ice / lava / vertical lowered drawbridge / horizontal lowered drawbridge /
+#    vertical raised drawbridge / horizontal raised drawbridge / air / cloud /
+#    under water
+#
+#  TRAPCOLORS order:
+#    arrow trap / dart trap / falling rock trap / squeaky board / bear trap /
+#    land mine / rolling boulder trap / sleeping gas trap / rust trap / fire
+#    trap / pit / spiked pit / hole / trap door / teleportation trap / level
+#    teleporter / magic portal / web / statue trap / magic trap / anti-magic
+#    field / polymorph trap
+
+DUNGEONCOLOR= 0 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 6 2 0 4 11 13 13 \
+              13 13 13 2 13 12 12 4 6 1 13 13 13 13 6 7 4
+
+TRAPCOLORS= 6 6 7 3 6 1 7 14 4 9 0 0 2 2 5 13 13 7 15 12 11 10
+
+#  default/original values:
+#
+#    DUNGEONCOLOR= 0 7 7 7 7 7 7 7 7 7 7 7 7 3 3 3 3 6 2 7 7 7 7 7 \
+#                  3 3 7 7 11 7 4 4 6 1 3 3 3 3 6 7 4
+#
+#    TRAPCOLORS= 6 6 7 3 6 1 7 12 4 9 0 0 3 3 5 5 13 7 7 12 12 10
+
+#------------------------------------------------------------------------------
+
+#
+#  MONSTERCOLORs
+#  =============
+#
+
+#  MOTD/news 2012.12.19
+#
+#  colors: black / blue / brown / cyan / gray / green / lightblue / lightcyan
+#          lightgreen / lightmagenta / magenta / orange / red / white / yellow
+#
+#          (black is blue or dark gray, depending on "use_darkgray" option)
+#
+#  Note: Monster colors got changed (and will be adjusted over time) to remove
+#  ambiguities and to avoid the far too repetitive use of certain color/symbol
+#  combinations (like "white @"). All 378 existing species/uniques are listed.
+#
+#  Note the end-of-line comments: "# - CLR_[...]" -> old color kept
+#                                 "# ! CLR_[...]" -> new color assigned
+
+#  a
+MONSTERCOLOR=giant ant:brown                       # - CLR_BROWN
+MONSTERCOLOR=killer bee:yellow                     # - CLR_YELLOW
+MONSTERCOLOR=soldier ant:orange                    # ! CLR_BLUE
+MONSTERCOLOR=fire ant:red                          # - CLR_RED
+MONSTERCOLOR=giant beetle:black                    # - CLR_BLACK
+MONSTERCOLOR=queen bee:magenta                     # - CLR_MAGENTA (HI_LORD)
+
+#  b
+MONSTERCOLOR=acid blob:green                       # - CLR_GREEN
+MONSTERCOLOR=quivering blob:white                  # - CLR_WHITE
+MONSTERCOLOR=gelatinous cube:lightcyan             # ! CLR_CYAN
+
+#  c
+MONSTERCOLOR=chickatrice:orange                    # ! CLR_BROWN
+MONSTERCOLOR=cockatrice:yellow                     # - CLR_YELLOW
+MONSTERCOLOR=pyrolisk:red                          # - CLR_RED
+
+#  d
+MONSTERCOLOR=jackal:lightgreen                     # ! CLR_BROWN
+MONSTERCOLOR=fox:red                               # - CLR_RED
+MONSTERCOLOR=coyote:brown                          # - CLR_BROWN
+#  werejackal -> @
+MONSTERCOLOR=little dog:white                      # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=dog:white                             # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=large dog:white                       # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=dingo:yellow                          # - CLR_YELLOW
+MONSTERCOLOR=wolf:gray                             # ! CLR_BROWN
+#  werewolf -> @
+MONSTERCOLOR=warg:orange                           # ! CLR_BROWN
+MONSTERCOLOR=winter wolf cub:cyan                  # - CLR_CYAN
+MONSTERCOLOR=winter wolf:lightcyan                 # ! CLR_CYAN
+MONSTERCOLOR=hell hound pup:magenta                # ! CLR_RED
+MONSTERCOLOR=hell hound:lightmagenta               # ! CLR_RED
+
+#  e
+MONSTERCOLOR=gas spore:gray                        # - CLR_GRAY
+MONSTERCOLOR=floating eye:orange                   # ! CLR_BLUE
+MONSTERCOLOR=freezing sphere:white                 # - CLR_WHITE
+MONSTERCOLOR=flaming sphere:red                    # - CLR_RED
+MONSTERCOLOR=shocking sphere:lightblue             # - CLR_BRIGHT_BLUE (HI_ZAP)
+
+#  f
+MONSTERCOLOR=kitten:white                          # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=housecat:white                        # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=jaguar:brown                          # - CLR_BROWN
+MONSTERCOLOR=lynx:cyan                             # - CLR_CYAN
+MONSTERCOLOR=panther:black                         # - CLR_BLACK
+MONSTERCOLOR=large cat:white                       # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=tiger:yellow                          # - CLR_YELLOW
+
+#  g
+MONSTERCOLOR=gremlin:green                         # - CLR_GREEN
+MONSTERCOLOR=gargoyle:orange                       # ! CLR_BROWN
+MONSTERCOLOR=winged gargoyle:lightmagenta          # ! CLR_MAGENTA (HI_LORD)
+
+#  h
+MONSTERCOLOR=hobbit:green                          # - CLR_GREEN
+MONSTERCOLOR=dwarf:red                             # - CLR_RED
+MONSTERCOLOR=bugbear:brown                         # - CLR_BROWN
+MONSTERCOLOR=dwarf lord:lightblue                  # ! CLR_BLUE
+MONSTERCOLOR=dwarf king:magenta                    # - CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=mind flayer:lightmagenta              # ! CLR_MAGENTA
+MONSTERCOLOR=master mind flayer:lightmagenta       # ! CLR_MAGENTA
+
+#  i
+MONSTERCOLOR=manes:lightgreen                      # ! CLR_RED
+MONSTERCOLOR=homunculus:green                      # - CLR_GREEN
+MONSTERCOLOR=imp:red                               # - CLR_RED
+MONSTERCOLOR=lemure:brown                          # - CLR_BROWN
+MONSTERCOLOR=quasit:lightblue                      # ! CLR_BLUE
+MONSTERCOLOR=tengu:lightcyan                       # ! CLR_CYAN
+
+#  j
+MONSTERCOLOR=blue jelly:lightblue                  # ! CLR_BLUE
+MONSTERCOLOR=spotted jelly:green                   # - CLR_GREEN
+MONSTERCOLOR=ochre jelly:orange                    # ! CLR_BROWN
+
+#  k
+MONSTERCOLOR=kobold:lightgreen                     # ! CLR_BROWN
+MONSTERCOLOR=large kobold:green                    # ! CLR_RED
+MONSTERCOLOR=kobold lord:magenta                   # - CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=kobold shaman:lightblue               # - CLR_BRIGHT_BLUE (HI_ZAP)
+
+#  l
+MONSTERCOLOR=leprechaun:green                      # - CLR_GREEN
+
+#  m
+MONSTERCOLOR=small mimic:orange                    # ! CLR_BROWN
+MONSTERCOLOR=large mimic:red                       # - CLR_RED
+MONSTERCOLOR=giant mimic:lightmagenta              # ! CLR_MAGENTA (HI_LORD)
+
+#  n
+MONSTERCOLOR=wood nymph:green                      # - CLR_GREEN
+MONSTERCOLOR=water nymph:lightblue                 # ! CLR_BLUE
+MONSTERCOLOR=mountain nymph:orange                 # ! CLR_BROWN
+
+#  o
+MONSTERCOLOR=goblin:gray                           # - CLR_GRAY
+MONSTERCOLOR=hobgoblin:brown                       # - CLR_BROWN
+MONSTERCOLOR=orc:red                               # - CLR_RED
+MONSTERCOLOR=hill orc:yellow                       # - CLR_YELLOW
+MONSTERCOLOR=Mordor orc:cyan                       # ! CLR_BLUE
+MONSTERCOLOR=Uruk-hai:black                        # - CLR_BLACK
+MONSTERCOLOR=orc shaman:lightblue                  # - CLR_BRIGHT_BLUE (HI_ZAP)
+MONSTERCOLOR=orc-captain:magenta                   # - CLR_MAGENTA (HI_LORD)
+
+#  p
+MONSTERCOLOR=rock piercer:gray                     # - CLR_GRAY
+MONSTERCOLOR=iron piercer:cyan                     # - CLR_CYAN
+MONSTERCOLOR=glass piercer:lightcyan               # ! CLR_WHITE
+
+#  q
+MONSTERCOLOR=rothe:brown                           # - CLR_BROWN
+MONSTERCOLOR=mumak:orange                          # ! CLR_GRAY
+MONSTERCOLOR=leocrotta:red                         # - CLR_RED
+MONSTERCOLOR=wumpus:cyan                           # - CLR_CYAN
+MONSTERCOLOR=titanothere:gray                      # - CLR_GRAY
+MONSTERCOLOR=baluchitherium:magenta                # ! CLR_GRAY
+MONSTERCOLOR=mastodon:black                        # - CLR_BLACK
+
+#  r
+MONSTERCOLOR=sewer rat:lightgreen                  # ! CLR_BROWN
+MONSTERCOLOR=giant rat:brown                       # - CLR_BROWN
+MONSTERCOLOR=rabid rat:orange                      # ! CLR_BROWN
+#  wererat -> @
+MONSTERCOLOR=rock mole:gray                        # - CLR_GRAY
+MONSTERCOLOR=woodchuck:magenta                     # ! CLR_BROWN
+
+#  s
+MONSTERCOLOR=cave spider:gray                      # - CLR_GRAY
+MONSTERCOLOR=centipede:yellow                      # - CLR_YELLOW
+MONSTERCOLOR=giant spider:magenta                  # - CLR_MAGENTA
+MONSTERCOLOR=scorpion:red                          # - CLR_RED
+
+#  t
+MONSTERCOLOR=lurker above:gray                     # - CLR_GRAY
+MONSTERCOLOR=trapper:green                         # - CLR_GREEN
+
+#  u
+MONSTERCOLOR=white unicorn:white                   # - CLR_WHITE
+MONSTERCOLOR=gray unicorn:gray                     # - CLR_GRAY
+MONSTERCOLOR=black unicorn:black                   # - CLR_BLACK
+MONSTERCOLOR=pony:brown                            # - CLR_BROWN
+MONSTERCOLOR=horse:red                             # ! CLR_BROWN
+MONSTERCOLOR=warhorse:lightmagenta                 # ! CLR_BROWN
+
+#  v
+MONSTERCOLOR=fog cloud:gray                        # - CLR_GRAY
+MONSTERCOLOR=dust vortex:brown                     # - CLR_BROWN
+MONSTERCOLOR=ice vortex:cyan                       # - CLR_CYAN
+MONSTERCOLOR=energy vortex:lightblue               # - CLR_BRIGHT_BLUE (HI_ZAP)
+MONSTERCOLOR=steam vortex:red                      # ! CLR_BLUE
+MONSTERCOLOR=fire vortex:yellow                    # - CLR_YELLOW
+
+#  w
+MONSTERCOLOR=baby long worm:brown                  # - CLR_BROWN
+MONSTERCOLOR=baby purple worm:magenta              # - CLR_MAGENTA
+MONSTERCOLOR=long worm:red                         # ! CLR_BROWN
+MONSTERCOLOR=purple worm:lightmagenta              # ! CLR_MAGENTA
+
+#  x
+MONSTERCOLOR=grid bug:magenta                      # - CLR_MAGENTA
+MONSTERCOLOR=xan:red                               # - CLR_RED
+
+#  y
+MONSTERCOLOR=yellow light:yellow                   # - CLR_YELLOW
+MONSTERCOLOR=black light:black                     # - CLR_BLACK
+
+#  z
+MONSTERCOLOR=zruty:orange                          # ! CLR_BROWN
+
+#  A
+MONSTERCOLOR=couatl:green                          # - CLR_GREEN
+MONSTERCOLOR=Aleax:yellow                          # - CLR_YELLOW
+MONSTERCOLOR=Angel:white                           # - CLR_WHITE
+MONSTERCOLOR=ki-rin:magenta                        # ! CLR_YELLOW (HI_GOLD)
+MONSTERCOLOR=Archon:lightmagenta                   # ! CLR_MAGENTA (HI_LORD)
+
+#  B
+MONSTERCOLOR=bat:brown                             # - CLR_BROWN
+MONSTERCOLOR=giant bat:red                         # - CLR_RED
+MONSTERCOLOR=raven:black                           # - CLR_BLACK
+MONSTERCOLOR=vampire bat:magenta                   # ! CLR_BLACK
+
+#  C
+MONSTERCOLOR=plains centaur:brown                  # - CLR_BROWN
+MONSTERCOLOR=forest centaur:green                  # - CLR_GREEN
+MONSTERCOLOR=mountain centaur:cyan                 # - CLR_CYAN
+
+#  D
+MONSTERCOLOR=baby gray dragon:gray                 # - CLR_GRAY
+MONSTERCOLOR=baby silver dragon:lightcyan          # - CLR_BRIGHT_CYAN
+#                                                        (DRAGON_SILVER)
+MONSTERCOLOR=baby red dragon:red                   # - CLR_RED
+MONSTERCOLOR=baby white dragon:white               # - CLR_WHITE
+MONSTERCOLOR=baby orange dragon:orange             # - CLR_ORANGE
+MONSTERCOLOR=baby black dragon:black               # - CLR_BLACK
+MONSTERCOLOR=baby blue dragon:lightblue            # ! CLR_BLUE
+MONSTERCOLOR=baby green dragon:green               # - CLR_GREEN
+MONSTERCOLOR=baby yellow dragon:yellow             # - CLR_YELLOW
+MONSTERCOLOR=gray dragon:gray                      # - CLR_GRAY
+MONSTERCOLOR=silver dragon:lightcyan               # - CLR_BRIGHT_CYAN
+#                                                        (DRAGON_SILVER)
+MONSTERCOLOR=red dragon:red                        # - CLR_RED
+MONSTERCOLOR=white dragon:white                    # - CLR_WHITE
+MONSTERCOLOR=orange dragon:orange                  # - CLR_ORANGE
+MONSTERCOLOR=black dragon:black                    # - CLR_BLACK
+MONSTERCOLOR=blue dragon:lightblue                 # ! CLR_BLUE
+MONSTERCOLOR=green dragon:green                    # - CLR_GREEN
+MONSTERCOLOR=yellow dragon:yellow                  # - CLR_YELLOW
+
+#  E
+MONSTERCOLOR=stalker:white                         # - CLR_WHITE
+MONSTERCOLOR=air elemental:cyan                    # - CLR_CYAN
+MONSTERCOLOR=fire elemental:yellow                 # - CLR_YELLOW
+MONSTERCOLOR=earth elemental:brown                 # - CLR_BROWN
+MONSTERCOLOR=water elemental:lightblue             # ! CLR_BLUE
+
+#  F
+MONSTERCOLOR=lichen:lightgreen                     # - CLR_BRIGHT_GREEN
+MONSTERCOLOR=brown mold:brown                      # - CLR_BROWN
+MONSTERCOLOR=yellow mold:yellow                    # - CLR_YELLOW
+MONSTERCOLOR=green mold:green                      # - CLR_GREEN
+MONSTERCOLOR=red mold:red                          # - CLR_RED
+MONSTERCOLOR=shrieker:lightmagenta                 # ! CLR_MAGENTA
+MONSTERCOLOR=violet fungus:magenta                 # - CLR_MAGENTA
+
+#  G
+MONSTERCOLOR=gnome:brown                           # - CLR_BROWN
+MONSTERCOLOR=gnome lord:red                        # ! CLR_BLUE
+MONSTERCOLOR=gnomish wizard:lightblue              # - CLR_BRIGHT_BLUE (HI_ZAP)
+MONSTERCOLOR=gnome king:magenta                    # - CLR_MAGENTA (HI_LORD)
+
+#  H
+MONSTERCOLOR=giant:red                             # - CLR_RED
+MONSTERCOLOR=stone giant:gray                      # - CLR_GRAY
+MONSTERCOLOR=hill giant:cyan                       # - CLR_CYAN
+MONSTERCOLOR=fire giant:yellow                     # - CLR_YELLOW
+MONSTERCOLOR=frost giant:white                     # - CLR_WHITE
+MONSTERCOLOR=storm giant:lightblue                 # ! CLR_BLUE
+MONSTERCOLOR=ettin:brown                           # - CLR_BROWN
+MONSTERCOLOR=titan:magenta                         # - CLR_MAGENTA
+MONSTERCOLOR=minotaur:orange                       # ! CLR_BROWN
+
+#  J
+MONSTERCOLOR=jabberwock:orange                     # - CLR_ORANGE
+
+#  K
+MONSTERCOLOR=Keystone Kop:lightblue                # ! CLR_BLUE
+MONSTERCOLOR=Kop Sergeant:red                      # ! CLR_BLUE
+MONSTERCOLOR=Kop Lieutenant:cyan                   # - CLR_CYAN
+MONSTERCOLOR=Kop Kaptain:magenta                   # - CLR_MAGENTA (HI_LORD)
+
+#  L
+MONSTERCOLOR=lich:orange                           # ! CLR_BROWN
+MONSTERCOLOR=demilich:red                          # - CLR_RED
+MONSTERCOLOR=master lich:magenta                   # - CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=arch-lich:lightmagenta                # ! CLR_MAGENTA (HI_LORD)
+
+#  M
+MONSTERCOLOR=kobold mummy:lightgreen               # ! CLR_BROWN
+MONSTERCOLOR=gnome mummy:brown                     # ! CLR_RED
+MONSTERCOLOR=orc mummy:gray                        # - CLR_GRAY
+MONSTERCOLOR=dwarf mummy:red                       # - CLR_RED
+MONSTERCOLOR=elf mummy:green                       # - CLR_GREEN
+MONSTERCOLOR=human mummy:white                     # ! CLR_GRAY
+MONSTERCOLOR=ettin mummy:lightblue                 # ! CLR_BLUE
+MONSTERCOLOR=giant mummy:cyan                      # - CLR_CYAN
+
+#  N
+MONSTERCOLOR=red naga hatchling:red                # - CLR_RED
+MONSTERCOLOR=black naga hatchling:black            # - CLR_BLACK
+MONSTERCOLOR=golden naga hatchling:yellow          # - CLR_YELLOW (HI_GOLD)
+MONSTERCOLOR=guardian naga hatchling:green         # - CLR_GREEN
+MONSTERCOLOR=red naga:red                          # - CLR_RED
+MONSTERCOLOR=black naga:black                      # - CLR_BLACK
+MONSTERCOLOR=golden naga:yellow                    # - CLR_YELLOW (HI_GOLD)
+MONSTERCOLOR=guardian naga:green                   # - CLR_GREEN
+
+#  O
+MONSTERCOLOR=ogre:brown                            # - CLR_BROWN
+MONSTERCOLOR=ogre lord:red                         # - CLR_RED
+MONSTERCOLOR=ogre king:magenta                     # - CLR_MAGENTA (HI_LORD)
+
+#  P
+MONSTERCOLOR=gray ooze:gray                        # - CLR_GRAY
+MONSTERCOLOR=brown pudding:brown                   # - CLR_BROWN
+MONSTERCOLOR=black pudding:black                   # - CLR_BLACK
+MONSTERCOLOR=green slime:green                     # - CLR_GREEN
+
+#  Q
+MONSTERCOLOR=quantum mechanic:cyan                 # - CLR_CYAN
+
+#  R
+MONSTERCOLOR=rust monster:orange                   # ! CLR_BROWN
+MONSTERCOLOR=disenchanter:lightblue                # ! CLR_BLUE
+
+#  S
+MONSTERCOLOR=garter snake:green                    # - CLR_GREEN
+MONSTERCOLOR=snake:brown                           # - CLR_BROWN
+MONSTERCOLOR=water moccasin:red                    # - CLR_RED
+MONSTERCOLOR=pit viper:black                       # ! CLR_BLUE
+MONSTERCOLOR=python:lightmagenta                   # ! CLR_MAGENTA
+MONSTERCOLOR=cobra:lightblue                       # ! CLR_BLUE
+
+#  T
+MONSTERCOLOR=troll:brown                           # - CLR_BROWN
+MONSTERCOLOR=ice troll:white                       # - CLR_WHITE
+MONSTERCOLOR=rock troll:cyan                       # - CLR_CYAN
+MONSTERCOLOR=water troll:lightblue                 # ! CLR_BLUE
+MONSTERCOLOR=Olog-hai:magenta                      # - CLR_MAGENTA (HI_LORD)
+
+#  U
+MONSTERCOLOR=umber hulk:orange                     # ! CLR_BROWN
+
+#  V
+MONSTERCOLOR=vampire:red                           # - CLR_RED
+MONSTERCOLOR=vampire lord:lightblue                # ! CLR_BLUE
+
+#  W
+MONSTERCOLOR=barrow wight:gray                     # - CLR_GRAY
+MONSTERCOLOR=wraith:black                          # - CLR_BLACK
+MONSTERCOLOR=Nazgul:magenta                        # - CLR_MAGENTA (HI_LORD)
+
+#  X
+MONSTERCOLOR=xorn:orange                           # ! CLR_BROWN
+
+#  Y
+MONSTERCOLOR=monkey:gray                           # - CLR_GRAY
+MONSTERCOLOR=ape:brown                             # - CLR_BROWN
+MONSTERCOLOR=owlbear:orange                        # ! CLR_BROWN
+MONSTERCOLOR=yeti:white                            # - CLR_WHITE
+MONSTERCOLOR=carnivorous ape:black                 # - CLR_BLACK
+MONSTERCOLOR=sasquatch:magenta                     # ! CLR_GRAY
+
+#  Z
+MONSTERCOLOR=kobold zombie:lightgreen              # ! CLR_BROWN
+MONSTERCOLOR=gnome zombie:brown                    # - CLR_BROWN
+MONSTERCOLOR=orc zombie:gray                       # - CLR_GRAY
+MONSTERCOLOR=dwarf zombie:red                      # - CLR_RED
+MONSTERCOLOR=elf zombie:green                      # - CLR_GREEN
+MONSTERCOLOR=human zombie:white                    # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=ettin zombie:lightblue                # ! CLR_BLUE
+MONSTERCOLOR=giant zombie:cyan                     # - CLR_CYAN
+MONSTERCOLOR=ghoul:black                           # - CLR_BLACK
+MONSTERCOLOR=skeleton:lightcyan                    # ! CLR_WHITE
+
+#  @
+MONSTERCOLOR=human:white                           # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=wererat:black                         # ! CLR_BROWN
+MONSTERCOLOR=werejackal:black                      # ! CLR_RED
+MONSTERCOLOR=werewolf:black                        # ! CLR_ORANGE
+MONSTERCOLOR=elf:white                             # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=Woodland-elf:green                    # - CLR_GREEN
+MONSTERCOLOR=Green-elf:lightgreen                  # - CLR_BRIGHT_GREEN
+MONSTERCOLOR=Grey-elf:gray                         # - CLR_GRAY
+MONSTERCOLOR=elf-lord:lightblue                    # - CLR_BRIGHT_BLUE
+MONSTERCOLOR=Elvenking:magenta                     # - CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=doppelganger:lightcyan                # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=nurse:white                           # - CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=shopkeeper:yellow                     # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=guard:orange                          # ! CLR_BLUE
+MONSTERCOLOR=prisoner:orange                       # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=aligned priest:brown                  # ! CLR_WHITE
+MONSTERCOLOR=high priest:lightmagenta              # ! CLR_WHITE
+MONSTERCOLOR=soldier:gray                          # - CLR_GRAY
+MONSTERCOLOR=sergeant:red                          # - CLR_RED
+MONSTERCOLOR=lieutenant:green                      # - CLR_GREEN
+MONSTERCOLOR=captain:lightblue                     # ! CLR_BLUE
+MONSTERCOLOR=watchman:cyan                         # ! CLR_GRAY
+MONSTERCOLOR=watch captain:lightcyan               # ! CLR_GREEN
+
+#  " "
+MONSTERCOLOR=ghost:white                           # ! CLR_GRAY
+MONSTERCOLOR=shade:black                           # - CLR_BLACK
+
+#  '
+MONSTERCOLOR=straw golem:lightgreen                # ! CLR_YELLOW
+MONSTERCOLOR=paper golem:white                     # - CLR_WHITE (HI_PAPER)
+MONSTERCOLOR=rope golem:orange                     # ! CLR_BROWN
+MONSTERCOLOR=gold golem:yellow                     # - CLR_YELLOW (HI_GOLD)
+MONSTERCOLOR=leather golem:black                   # ! CLR_BROWN (HI_LEATHER)
+MONSTERCOLOR=wood golem:brown                      # - CLR_BROWN (HI_WOOD)
+MONSTERCOLOR=flesh golem:red                       # - CLR_RED
+MONSTERCOLOR=clay golem:lightblue                  # ! CLR_BROWN
+MONSTERCOLOR=stone golem:gray                      # - CLR_GRAY
+MONSTERCOLOR=glass golem:lightcyan                 # ! CLR_CYAN
+MONSTERCOLOR=iron golem:cyan                       # - CLR_CYAN (HI_METAL)
+
+#  &
+MONSTERCOLOR=water demon:blue                      # - CLR_BLUE
+MONSTERCOLOR=horned devil:brown                    # - CLR_BROWN
+MONSTERCOLOR=succubus:green                        # ! CLR_GRAY
+MONSTERCOLOR=incubus:green                         # ! CLR_GRAY
+MONSTERCOLOR=erinys:cyan                           # ! CLR_RED
+MONSTERCOLOR=barbed devil:red                      # - CLR_RED
+MONSTERCOLOR=marilith:orange                       # ! CLR_RED
+MONSTERCOLOR=vrock:red                             # - CLR_RED
+MONSTERCOLOR=hezrou:red                            # - CLR_RED
+MONSTERCOLOR=bone devil:gray                       # - CLR_GRAY
+MONSTERCOLOR=ice devil:white                       # - CLR_WHITE
+MONSTERCOLOR=nalfeshnee:lightblue                  # ! CLR_RED
+MONSTERCOLOR=pit fiend:black                       # ! CLR_RED
+MONSTERCOLOR=balrog:magenta                        # ! CLR_RED
+MONSTERCOLOR=mail daemon:lightmagenta              # ! CLR_BRIGHT_BLUE
+MONSTERCOLOR=djinni:yellow                         # - CLR_YELLOW
+MONSTERCOLOR=sandestin:lightcyan                   # ! CLR_GRAY
+
+#  ;
+MONSTERCOLOR=jellyfish:lightgreen                  # ! CLR_BLUE
+MONSTERCOLOR=piranha:red                           # - CLR_RED
+MONSTERCOLOR=shark:gray                            # - CLR_GRAY
+MONSTERCOLOR=giant eel:lightcyan                   # ! CLR_CYAN
+MONSTERCOLOR=electric eel:lightblue                # - CLR_BRIGHT_BLUE
+MONSTERCOLOR=kraken:lightmagenta                   # ! CLR_RED
+
+#  :
+MONSTERCOLOR=newt:yellow                           # - CLR_YELLOW
+MONSTERCOLOR=gecko:lightgreen                      # ! CLR_GREEN
+MONSTERCOLOR=iguana:brown                          # - CLR_BROWN
+MONSTERCOLOR=baby crocodile:red                    # ! CLR_BROWN
+MONSTERCOLOR=lizard:green                          # - CLR_GREEN
+MONSTERCOLOR=chameleon:lightcyan                   # ! CLR_BROWN
+MONSTERCOLOR=crocodile:lightmagenta                # ! CLR_BROWN
+MONSTERCOLOR=salamander:orange                     # - CLR_ORANGE
+
+#  quest guardians
+MONSTERCOLOR=student:orange                        # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=chieftain:orange                      # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=neanderthal:orange                    # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=attendant:orange                      # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=page:orange                           # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=abbot:orange                          # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=acolyte:orange                        # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=hunter:orange                         # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=thug:orange                           # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=ninja:black                           # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=roshi:orange                          # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=guide:orange                          # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=warrior:orange                        # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=apprentice:orange                     # ! CLR_WHITE (HI_DOMESTIC)
+
+#  quest leaders
+MONSTERCOLOR=Lord Carnarvon:lightmagenta           # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Pelias:lightmagenta                   # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Shaman Karnov:lightmagenta            # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Hippocrates:lightmagenta              # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=King Arthur:lightmagenta              # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Grand Master:lightmagenta             # ! CLR_BLACK
+MONSTERCOLOR=Arch Priest:lightmagenta              # ! CLR_WHITE
+MONSTERCOLOR=Orion:lightmagenta                    # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Master of Thieves:lightmagenta        # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Lord Sato:lightmagenta                # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Twoflower:lightmagenta                # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=Norn:lightmagenta                     # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Neferet the Green:lightmagenta        # ! CLR_GREEN
+
+#  quest nemeses
+MONSTERCOLOR=Minion of Huhetotl:lightmagenta       # ! CLR_RED
+MONSTERCOLOR=Thoth Amon:lightmagenta               # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Chromatic Dragon:lightmagenta         # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Cyclops:lightmagenta                  # ! CLR_GRAY
+MONSTERCOLOR=Ixoth:lightmagenta                    # ! CLR_RED
+MONSTERCOLOR=Master Kaen:lightmagenta              # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Nalzok:lightmagenta                   # ! CLR_RED
+MONSTERCOLOR=Scorpius:lightmagenta                 # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Master Assassin:lightmagenta          # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Ashikaga Takauji:lightmagenta         # ! CLR_MAGENTA (HI_LORD)
+#  Master of Thieves -> quest leaders
+MONSTERCOLOR=Lord Surtur:lightmagenta              # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Dark One:lightmagenta                 # ! CLR_BLACK
+
+#  roles
+MONSTERCOLOR=archeologist:lightcyan                # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=barbarian:lightcyan                   # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=caveman:lightcyan                     # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=cavewoman:lightcyan                   # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=healer:lightcyan                      # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=knight:lightcyan                      # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=monk:lightcyan                        # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=priest:lightcyan                      # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=priestess:lightcyan                   # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=ranger:lightcyan                      # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=rogue:lightcyan                       # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=samurai:lightcyan                     # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=tourist:lightcyan                     # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=valkyrie:lightcyan                    # ! CLR_WHITE (HI_DOMESTIC)
+MONSTERCOLOR=wizard:lightcyan                      # ! CLR_WHITE (HI_DOMESTIC)
+
+#  uniques
+MONSTERCOLOR=Vlad the Impaler:lightmagenta         # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Oracle:lightblue                      # - CLR_BRIGHT_BLUE (HI_ZAP)
+MONSTERCOLOR=Medusa:lightgreen                     # - CLR_BRIGHT_GREEN
+MONSTERCOLOR=Croesus:lightmagenta                  # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Wizard of Yendor:lightmagenta         # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Juiblex:lightgreen                    # - CLR_BRIGHT_GREEN
+MONSTERCOLOR=Yeenoghu:lightmagenta                 # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Orcus:lightmagenta                    # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Geryon:lightmagenta                   # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Dispater:lightmagenta                 # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Baalzebub:lightmagenta                # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Asmodeus:lightmagenta                 # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Demogorgon:lightmagenta               # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Death:lightmagenta                    # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Pestilence:lightmagenta               # ! CLR_MAGENTA (HI_LORD)
+MONSTERCOLOR=Famine:lightmagenta                   # ! CLR_MAGENTA (HI_LORD)
+
+###############################################################################
+
+#
+#  common patches
+#  ==============
+#
+
+#  http://bilious.alt.org/?205
+OPTIONS=use_darkgray
+
+###############################################################################
+
+#
+#  Curses GUI
+#  ==========
+#
+
+#  http://bilious.alt.org/?378
+
+#  uncomment this to activate
+#OPTIONS=windowtype:curses
+
+OPTIONS=cursesgraphics
+#OPTIONS=!IBMgraphics                   #  configure this in "vanilla options"
+OPTIONS=align_message:bottom
+OPTIONS=align_status:right
+OPTIONS=guicolor
+OPTIONS=mouse_support
+OPTIONS=petattr:i
+OPTIONS=popup_dialog
+#OPTIONS=splash_screen                  #  configure this in "vanilla options"
+OPTIONS=term_cols:120
+OPTIONS=term_rows:36
+OPTIONS=windowborders:3
+
+###############################################################################
+
+#
+#  MENUCOLORs
+#  ==========
+#
+
+#  http://bilious.alt.org/?11
+#
+#  colors: black / blue / brown / cyan / gray / green / lightblue / lightcyan
+#          lightgreen / lightmagenta / magenta / orange / red / white / yellow
+#
+#          (black is blue or dark gray, depending on "use_darkgray" option)
+#
+#  attributes: &blink / &bold / &dim / &inverse / &none / &underline
+
+#  !de-/activate
+OPTIONS=menucolors
+
+#  coins
+MENUCOLOR=" gold piece"=yellow
+
+#  general beatitude
+MENUCOLOR=" blessed "=lightgreen
+MENUCOLOR=" cursed "=orange
+MENUCOLOR=" uncursed "=yellow
+
+#  identified water
+MENUCOLOR=" holy "=lightgreen
+MENUCOLOR=" unholy "=orange
+
+#  spell failure rates
+MENUCOLOR=" 0%"=lightgreen
+MENUCOLOR=" [1-9]%"=yellow
+MENUCOLOR=" 1[0-9]%"=yellow
+MENUCOLOR=" 2[0-4]%"=yellow
+MENUCOLOR=" 2[5-9]%"=orange
+MENUCOLOR=" [3-4][0-9]%"=orange
+MENUCOLOR=" [5-9][0-9]%"=red
+MENUCOLOR=" 100%"=lightmagenta
+
+###############################################################################
+
+#
+#  STATUSCOLORs
+#  ============
+#
+
+#  http://bilious.alt.org/?142
+#
+#  colors: black / blue / brown / cyan / gray / green / lightblue / lightcyan
+#          lightgreen / lightmagenta / magenta / orange / red / white / yellow
+#
+#          (black is blue or dark gray, depending on "use_darkgray" option)
+#
+#  attributes: &blink / &bold / &dim / &inverse / &none / &underline
+
+#  !de-/activate
+OPTIONS=statuscolors
+
+#  HP
+STATUSCOLOR=HP%100:lightgreen
+STATUSCOLOR=HP%80:yellow
+STATUSCOLOR=HP%60:orange
+STATUSCOLOR=HP%40:red
+STATUSCOLOR=HP%20:lightmagenta
+#  prayer threshold (<= 1/7 of maxHP)
+STATUSCOLOR=HP%14:lightmagenta&inverse
+
+#  Pw
+STATUSCOLOR=Pw%100:lightgreen
+STATUSCOLOR=Pw%80:yellow
+STATUSCOLOR=Pw%60:orange
+STATUSCOLOR=Pw%40:red
+STATUSCOLOR=Pw%20:lightmagenta
+
+#  encumbrance
+STATUSCOLOR=Burdened:lightcyan
+STATUSCOLOR=Stressed:orange
+STATUSCOLOR=Strained:red
+STATUSCOLOR=Overtaxed:lightmagenta
+STATUSCOLOR=Overloaded:lightmagenta
+
+#  hunger
+STATUSCOLOR=Satiated:lightcyan
+STATUSCOLOR=Hungry:orange
+STATUSCOLOR=Weak:red
+STATUSCOLOR=Fainting:lightmagenta
+STATUSCOLOR=Fainted:lightmagenta
+STATUSCOLOR=Starved:lightmagenta
+
+#  health conditions
+STATUSCOLOR=FoodPois:lightmagenta
+STATUSCOLOR=Ill:lightmagenta
+STATUSCOLOR=Slime:lightmagenta
+
+#  mental conditions
+STATUSCOLOR=Conf:yellow
+STATUSCOLOR=Hallu:yellow
+STATUSCOLOR=Stun:yellow
+
+#  other conditions
+STATUSCOLOR=Blind:yellow
+
+#  SporkHack
+STATUSCOLOR=Slow:lightmagenta
+
+###############################################################################
+
+#
+#  vanilla options
+#  ===============
+#
+
+#  http://nethack.org/v343/Guidebook.html#_TOCentry_39
+
+#  character
+#OPTIONS=name:
+#OPTIONS=role:(...|random)
+#OPTIONS=character:(...|random)
+#OPTIONS=race:(dwarf|elf|gnome|human|orc|random)
+#OPTIONS=gender:(female|male|random)
+#OPTIONS=female
+#OPTIONS=male
+#OPTIONS=align:(chaotic|lawful|neutral)
+#OPTIONS=pettype:(cat|dog|none)
+
+#  appearance
+OPTIONS=!DECgraphics
+OPTIONS=!IBMgraphics
+OPTIONS=boulder:0
+OPTIONS=!cmdassist
+OPTIONS=color
+OPTIONS=confirm
+OPTIONS=disclose:+i +a +v +g +c
+#  change pools/moats, lava and "under water" to '$'
+#PTIONS=dungeon: |--------||.-|++##.##<><>_|\\#{}.}..## #}
+OPTIONS=dungeon: |--------||.-|++##.##<><>_|\\#{$.$..## #$
+#  change explosions to look like explosions
+#PTIONS=effects:|-\\/*!)(0#@*/-\\||\\-//-\\| |\\-/
+OPTIONS=effects:|-\\/*!)(0#@*/-\\||\\-/\\|/-X-/|\\
+OPTIONS=!extmenu
+OPTIONS=fixinv
+OPTIONS=help
+OPTIONS=hilite_pet
+OPTIONS=legacy
+OPTIONS=lit_corridor
+OPTIONS=!lootabc
+OPTIONS=menustyle:full
+OPTIONS=menu_headings:inverse
+#  change ghosts/shades to '9' and golems to '7'
+#PTIONS=monsters:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@ '&;:~]
+OPTIONS=monsters:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@97&;:~m
+OPTIONS=msghistory:240
+OPTIONS=msg_window:reversed
+OPTIONS=objects:])[="(%!?+/$*`0_.
+OPTIONS=packorder:$")[%?+!=/(*`0_
+OPTIONS=!perm_invent
+OPTIONS=prayconfirm
+OPTIONS=runmode:teleport
+OPTIONS=scores:10 top/0 around/
+OPTIONS=showexp
+OPTIONS=showrace
+OPTIONS=showscore
+OPTIONS=sortpack
+OPTIONS=sound
+OPTIONS=!sparkle
+OPTIONS=splash_screen
+OPTIONS=standout
+OPTIONS=suppress_alert:3.4.3
+OPTIONS=time
+OPTIONS=tombstone
+OPTIONS=!toptenwin
+#  change magic portals to '$'
+#PTIONS=traps:\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\"\^\^\^\^
+OPTIONS=traps:\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\^\$\"\^\^\^\^
+OPTIONS=use_inverse
+OPTIONS=verbose
+#OPTIONS=windowtype:tty                 #  assumed to be the default on servers
+OPTIONS=wraptext
+
+#  autopickup
+OPTIONS=autopickup
+OPTIONS=pickup_burden:unencumbered
+OPTIONS=pickup_types:$"?+!=/
+#  "always pick up" exceptions
+AUTOPICKUP_EXCEPTION="<*<<<*"
+#  - light sources
+AUTOPICKUP_EXCEPTION="<*brass lantern*"
+AUTOPICKUP_EXCEPTION="<*magic lamp*"
+AUTOPICKUP_EXCEPTION="<*lamp called magic*"
+AUTOPICKUP_EXCEPTION="<*oil lamp*"
+AUTOPICKUP_EXCEPTION="<*lamp called oil*"
+AUTOPICKUP_EXCEPTION="<*tallow candle*"
+AUTOPICKUP_EXCEPTION="<*candle* called tallow*"
+AUTOPICKUP_EXCEPTION="<*wax candle*"
+AUTOPICKUP_EXCEPTION="<*candle* called wax*"
+AUTOPICKUP_EXCEPTION="<*candle"
+AUTOPICKUP_EXCEPTION="<*candles"
+AUTOPICKUP_EXCEPTION="<*lamp"
+AUTOPICKUP_EXCEPTION="<*lamp called *1*"
+AUTOPICKUP_EXCEPTION="<*lamp called *2*"
+#  - magical tools
+AUTOPICKUP_EXCEPTION="<*bag of holding*"
+AUTOPICKUP_EXCEPTION="<*bag called holding*"
+AUTOPICKUP_EXCEPTION="<*bag of tricks*"
+AUTOPICKUP_EXCEPTION="<*crystal ball*"
+AUTOPICKUP_EXCEPTION="<*glass orb*"
+AUTOPICKUP_EXCEPTION="<*drum of earthquake*"
+AUTOPICKUP_EXCEPTION="<*drum called earthquake*"
+AUTOPICKUP_EXCEPTION="<*figurine*"
+AUTOPICKUP_EXCEPTION="<*fire horn*"
+AUTOPICKUP_EXCEPTION="<*frost horn*"
+AUTOPICKUP_EXCEPTION="<*horn of plenty*"
+AUTOPICKUP_EXCEPTION="<*magic flute*"
+AUTOPICKUP_EXCEPTION="<*flute called magic*"
+AUTOPICKUP_EXCEPTION="<*magic harp*"
+AUTOPICKUP_EXCEPTION="<*harp called magic*"
+AUTOPICKUP_EXCEPTION="<*magic lamp*"
+AUTOPICKUP_EXCEPTION="<*lamp called magic*"
+AUTOPICKUP_EXCEPTION="<*magic marker*"
+AUTOPICKUP_EXCEPTION="<*magic whistle*"
+AUTOPICKUP_EXCEPTION="<*whistle called magic*"
+AUTOPICKUP_EXCEPTION="<*unicorn horn*"
+#  "never pick up" exceptions
+AUTOPICKUP_EXCEPTION=">*>>>*"
+
+#  menu keys
+#OPTIONS=menu_deselect_all:\-
+#OPTIONS=menu_deselect_page:\\
+#OPTIONS=menu_first_page:\^
+#OPTIONS=menu_invert_all:\@
+#OPTIONS=menu_invert_page:\~
+#OPTIONS=menu_last_page:\|
+#OPTIONS=menu_next_page:\>
+#OPTIONS=menu_previous_page:\<
+#OPTIONS=menu_search:\:
+#OPTIONS=menu_select_all:\.
+#OPTIONS=menu_select_page:\,
+
+#  names
+OPTIONS=fruit:Banana
+OPTIONS=catname:Meow Zedong
+OPTIONS=dogname:Karl Barx
+OPTIONS=horsename:Neigh Guevara
+
+#  the rest...
+OPTIONS=!autodig
+OPTIONS=!autoquiver
+OPTIONS=checkpoint
+OPTIONS=checkspace
+OPTIONS=!eight_bit_tty
+OPTIONS=!ignintr
+OPTIONS=mail
+OPTIONS=news
+OPTIONS=!null
+OPTIONS=number_pad:1
+OPTIONS=!pushweapon
+OPTIONS=!rest_on_space
+OPTIONS=safe_pet
+OPTIONS=silent
+OPTIONS=!timed_delay
+OPTIONS=travel
+
+##########################################################################################################
+
+#
+#  MSGTYPEs
+#  ========
+#
+
+#  http://bilious.alt.org/?397
+#
+#  MSGTYPE=(hide|norep|show|stop) "<text>"
+
+#  annoying message spam: various
+MSGTYPE=hide "With * effort you move the boulder."              #  boulder pushing
+MSGTYPE=hide "[HP:*(+*)]"                                       #  hp_notify healing
+MSGTYPE=hide "You caitiff!"                                     #  knight's code of conduct
+MSGTYPE=hide "Your armor is rather cumbersome..."               #  monk wearing body armor
+MSGTYPE=hide "You displaced *."                                 #  pet displacement
+
+#  annoying message spam: artifacts
+#MSGTYPE=hide "The fiery blade *"                                #  Fire Brand
+#MSGTYPE=hide "The ice-cold blade *"                             #  Frost Brand
+#MSGTYPE=hide "The magic-absorbing blade *!"                     #  Magicbane
+#MSGTYPE=hide "The massive hammer hits*"                         #  Mjollnir
+#MSGTYPE=hide "* draws the life from *!"                         #  Staff of Aesculapius / Stormbringer
+MSGTYPE=hide "* begins to glow brilliantly!"                    #  Sunsword (wielding)
+MSGTYPE=hide "* stops glowing."                                 #  Sunsword (unwielding)
+
+#  annoying message spam: pudding farming
+#MSGTYPE=hide "The black pudding turns to flee!"
+#MSGTYPE=hide "The black pudding divides as you hit it!"
+#MSGTYPE=hide "Your * looks completely corroded."
+#MSGTYPE=hide "Your * feels completely corroded."
+
+#  amulet of strangulation
+MSGTYPE=stop "It constricts your throat!"
+MSGTYPE=stop "You find it hard to breathe."
+MSGTYPE=stop "Your * is becoming constricted."
+MSGTYPE=stop "You're gasping for air."
+MSGTYPE=stop "Your blood is having trouble reaching your brain."
+MSGTYPE=stop "You can no longer breathe."
+MSGTYPE=stop "The pressure on your * increases."
+MSGTYPE=stop "You're turning blue."
+MSGTYPE=stop "Your consciousness is fading."
+MSGTYPE=stop "You suffocate."
+
+#  dangerous items in monster hands
+MSGTYPE=stop "* picks up *Vorpal Blade*"
+MSGTYPE=stop "* wields *Vorpal Blade*"
+MSGTYPE=stop "* swings *Vorpal Blade*"
+
+#  (potential) drowning attack
+MSGTYPE=stop "The couatl swings itself around you!"
+MSGTYPE=stop "The electric eel swings itself around you!"
+MSGTYPE=stop "The giant eel swings itself around you!"
+MSGTYPE=stop "The kraken swings itself around you!"
+MSGTYPE=stop "The python grabs you!"
+
+#  food poisoning
+MSGTYPE=stop "Ulch - that * was tainted*!"
+
+#  hunger
+MSGTYPE=stop "You feel hungry."
+MSGTYPE=stop "You are beginning to feel hungry."
+MSGTYPE=stop "You are getting the munchies."                                    #  hallu
+MSGTYPE=stop "You feel weak now."
+MSGTYPE=stop "You still have the munchies."                                     #  hallu
+MSGTYPE=stop "You feel weak."
+MSGTYPE=stop "You are beginning to feel weak."
+MSGTYPE=stop "The munchies are interfering with your motor capabilities."       #  hallu
+MSGTYPE=stop "* needs food, badly!"
+MSGTYPE=stop "You only feel hungry now."
+MSGTYPE=stop "You now have a lesser case of the munchies."                      #  hallu
+MSGTYPE=stop "You faint from lack of food."
+MSGTYPE=stop "You regain consciousness."
+MSGTYPE=stop "You die from starvation."
+MSGTYPE=stop "You die from hunger and exhaustion."
+
+#  illness
+MSGTYPE=stop "You feel deathly sick."
+MSGTYPE=stop "You feel even worse."
+MSGTYPE=stop "You feel much worse."
+MSGTYPE=stop "You feel somewhat better."
+MSGTYPE=stop "What a relief!"
+MSGTYPE=stop "You die from your illness."
+
+#  (potential) inventory cursing
+MSGTYPE=stop "You feel a malignant aura surround you."
+MSGTYPE=stop "You feel a malignant aura surround the magic-absorbing blade."
+
+#  (master) mind flayer (these can get quite annoying)
+MSGTYPE=stop "You sense a faint wave of psychic energy."
+MSGTYPE=stop "A wave of psychic energy pours over you!"
+MSGTYPE=stop "It locks on to your *!"
+MSGTYPE=stop "* concentrates."
+MSGTYPE=stop "* tentacles suck you!"
+MSGTYPE=stop "You don't seem harmed."
+MSGTYPE=stop "Your helmet blocks the attack to your head."
+MSGTYPE=stop "Your brain is eaten!"
+MSGTYPE=stop "Your last thought fades away."
+MSGTYPE=stop "Unfortunately your brain is still gone."
+
+#  near-death
+MSGTYPE=stop "You hear the howling of the CwnAnnwn..."
+MSGTYPE=stop "You hear the wailing of the Banshee..."
+MSGTYPE=stop "*, all your powers will be lost..."
+MSGTYPE=stop "*, your life force is running out."
+MSGTYPE=stop "* is about to die."
+
+#  skill training
+MSGTYPE=stop "You feel more confident in your *skills."
+MSGTYPE=stop "You are now more skilled in *."
+MSGTYPE=stop "You are now most skilled in *."
+
+#  sliming
+MSGTYPE=stop "You don't feel very well."
+MSGTYPE=stop "You suck in some slime and don't feel very well."
+MSGTYPE=stop "You are turning a little green."
+MSGTYPE=stop "Your limbs are getting oozy."
+MSGTYPE=stop "Your skin begins to peel away."
+MSGTYPE=stop "You are turning into a green slime."
+MSGTYPE=stop "You are turning into *."                                  #  hallu
+MSGTYPE=stop "You have become a green slime."
+MSGTYPE=stop "You have become *."                                       #  hallu
+
+#  stoning
+MSGTYPE=stop "You are slowing down."
+MSGTYPE=stop "Your limbs are stiffening."
+MSGTYPE=stop "Your limbs have turned to stone."
+MSGTYPE=stop "You have turned to stone."
+MSGTYPE=stop "You are a statue."
+
+#  vibrating square
+MSGTYPE=stop "You feel a strange vibration beneath *."
+MSGTYPE=stop "You feel a strange vibration under your *."
+
+#  vomiting
+MSGTYPE=stop "You are feeling mildly nauseated."
+MSGTYPE=stop "You feel slightly confused."
+MSGTYPE=stop "You can't seem to think straight."
+MSGTYPE=stop "You feel incredibly sick."
+MSGTYPE=stop "You suddenly vomit!"
+
+#  Wizard of Yendor
+MSGTYPE=stop "You feel vaguely nervous."
+MSGTYPE=stop "You notice a black glow surrounding you."
+MSGTYPE=stop "A voice booms out..."
+MSGTYPE=stop "So thou thought thou couldst * me, fool."
+
+#---------------------------------------------------------------------------------------------------------
+
+#  various properties (work in progress)
+
+#  - aggravate monster
+MSGTYPE=stop "You feel less attractive."                                #  sit.c        gremlin
+
+#  - automatic searching
+MSGTYPE=stop "You feel perceptive!"                                     #  attrib.c     level++
+MSGTYPE=stop "You feel less perceptive!"                                #  attrib.c     level--
+MSGTYPE=stop "You feel unaware!"                                        #  attrib.c     level-- (monk)
+
+#  - charisma
+MSGTYPE=stop "You feel charismatic!"                                    #  attrib.c     a_cha++
+MSGTYPE=stop "You feel very charismatic!"                               #  attrib.c     a_cha++ (>1)
+MSGTYPE=stop "You feel repulsive!"                                      #  attrib.c     a_cha--
+MSGTYPE=stop "You feel very repulsive!"                                 #  attrib.c     a_cha-- (>1)
+
+#  - cold resistance
+MSGTYPE=stop "You feel warm!"                                           #  attrib.c     level++
+MSGTYPE=stop "You feel cooler!"                                         #  attrib.c     level--
+MSGTYPE=stop "You feel full of hot air."                                #  eat.c        eat_mon
+MSGTYPE=stop "You feel cooler."                                         #  sit.c        gremlin
+
+#  - constitution
+MSGTYPE=stop "You feel tough!"                                          #  attrib.c     a_con++
+MSGTYPE=stop "You feel very tough!"                                     #  attrib.c     a_con++ (>1)
+MSGTYPE=stop "You feel fragile!"                                        #  attrib.c     a_con--
+MSGTYPE=stop "You feel very fragile!"                                   #  attrib.c     a_con-- (>1)
+MSGTYPE=stop "You must be leading a healthy life-style."                #  attrib.c     exe_con
+MSGTYPE=stop "You haven't been watching your health."                   #  attrib.c     abu_con
+
+#  - dexterity
+MSGTYPE=stop "You feel agile!"                                          #  attrib.c     a_dex++
+MSGTYPE=stop "You feel very agile!"                                     #  attrib.c     a_dex++ (>1)
+MSGTYPE=stop "You feel clumsy!"                                         #  attrib.c     a_dex--
+MSGTYPE=stop "You feel very clumsy!"                                    #  attrib.c     a_dex-- (>1)
+MSGTYPE=stop "You must have been working on your reflexes."             #  attrib.c     exe_dex
+MSGTYPE=stop "You haven't been working on reflexes lately."             #  attrib.c     abu_dex
+
+#  - disintegration resistance
+MSGTYPE=stop "You feel very firm."                                      #  eat.c        eat_mon
+MSGTYPE=stop "You feel totally together, man."                          #  eat.c        eat_mon (hallu)
+
+#  - fire resistance
+MSGTYPE=stop "You feel cool!"                                           #  attrib.c     level++
+MSGTYPE=stop "You feel warmer!"                                         #  attrib.c     level--
+MSGTYPE=stop "You feel a momentary chill."                              #  eat.c        eat_mon
+MSGTYPE=stop "You be chillin'."                                         #  eat.c        eat_mon (hallu)
+MSGTYPE=stop "You feel warmer."                                         #  sit.c        gremlin
+
+#  - intelligence
+MSGTYPE=stop "You feel smart!"                                          #  attrib.c     a_int++
+MSGTYPE=stop "You feel very smart!"                                     #  attrib.c     a_int++ (>1)
+MSGTYPE=stop "You feel stupid!"                                         #  attrib.c     a_int--
+MSGTYPE=stop "You feel very stupid!"                                    #  attrib.c     a_int-- (>1)
+
+#  - invisibility
+MSGTYPE=stop "You feel paranoid."                                       #  sit.c        gremlin
+
+#  - lycanthropy
+MSGTYPE=stop "You feel feverish."                                       #  mhitu.c      mon_hit (werefoo)
+MSGTYPE=stop "You feel purified."                                       #  were.c       diverse
+
+#  - poison resistance
+MSGTYPE=stop "You feel healthy!"                                        #  attrib.c     level++
+MSGTYPE=stop "You feel hardy!"                                          #  attrib.c     level++ (tourist)
+MSGTYPE=stop "You feel less healthy!"                                   #  attrib.c     level--
+MSGTYPE=stop "You feel less hardy!"                                     #  attrib.c     level-- (tourist)
+MSGTYPE=stop "You feel healthy."                                        #  eat.c        eat_mon
+MSGTYPE=stop "You feel especially healthy."                             #  eat.c        eat_mon (already)
+MSGTYPE=stop "You feel a little sick!"                                  #  sit.c        gremlin
+
+#  - protection
+MSGTYPE=stop "You feel vulnerable."                                     #  sit.c        gremlin
+
+#  - see invisible
+MSGTYPE=stop "You thought you saw something!"                           #  sit.c        gremlin
+MSGTYPE=stop "You tawt you taw a puttie tat!"                           #  sit.c        gremlin (hallu)
+MSGTYPE=stop "Your vision becomes clear."                               #  sit.c        throne
+
+#  - shock resistance
+MSGTYPE=stop "You feel insulated!"                                      #  attrib.c     level++
+MSGTYPE=stop "You feel conductive!"                                     #  attrib.c     level--
+MSGTYPE=stop "Your health currently feels amplified!"                   #  eat.c        eat_mon
+MSGTYPE=stop "You feel grounded in reality."                            #  eat.c        eat_mon (hallu)
+
+#  - sleep resistance
+MSGTYPE=stop "You feel awake!"                                          #  attrib.c     level++
+MSGTYPE=stop "You feel tired!"                                          #  attrib.c     level--
+MSGTYPE=stop "You feel wide awake."                                     #  eat.c        eat_mon
+
+#  - speed
+MSGTYPE=stop "You feel quick!"                                          #  attrib.c     level++
+MSGTYPE=stop "You feel slow!"                                           #  attrib.c     level--
+MSGTYPE=stop "You seem faster."                                         #  eat.c        eat_mon (Q)
+MSGTYPE=stop "You seem slower."                                         #  eat.c        eat_mon (Q)
+MSGTYPE=stop "You feel slower."                                         #  sit.c        gremlin
+
+#  - stealth
+MSGTYPE=stop "You feel stealthy!"                                       #  attrib.c     level++
+MSGTYPE=stop "You feel less stealthy!"                                  #  attrib.c     level--
+MSGTYPE=stop "You feel clumsy."                                         #  sit.c        gremlin
+
+#  - strength
+MSGTYPE=stop "You feel strong!"                                         #  attrib.c     a_str++
+MSGTYPE=stop "You feel very strong!"                                    #  attrib.c     a_str++ (>1)
+MSGTYPE=stop "You feel weak!"                                           #  attrib.c     a_str--
+MSGTYPE=stop "You feel very weak!"                                      #  attrib.c     a_str-- (>1)
+MSGTYPE=stop "You must have been exercising."                           #  attrib.c     exe_str
+MSGTYPE=stop "You must have been abusing your body."                    #  attrib.c     abu_str
+
+#  - telepathy
+MSGTYPE=stop "You feel a strange mental acuity."                        #  eat.c        eat_mon
+MSGTYPE=stop "You feel in touch with the cosmos."                       #  eat.c        eat_mon (hallu)
+MSGTYPE=stop "Your senses fail!"                                        #  sit.c        gremlin
+
+#  - teleportitis
+MSGTYPE=stop "You feel very jumpy."                                     #  eat.c        eat_mon
+MSGTYPE=stop "You feel diffuse."                                        #  eat.c        eat_mon (hallu)
+MSGTYPE=stop "You feel less jumpy."                                     #  sit.c        gremlin
+
+#  - teleport control
+MSGTYPE=stop "You feel controlled!"                                     #  attrib.c     level++
+MSGTYPE=stop "You feel uncontrolled!"                                   #  attrib.c     level--
+MSGTYPE=stop "You feel in control of yourself."                         #  eat.c        eat_mon
+MSGTYPE=stop "You feel centered in your personal space."                #  eat.c        eat_mon (hallu)
+
+#  - warning
+MSGTYPE=stop "You feel sensitive!"                                      #  attrib.c     level++
+MSGTYPE=stop "You feel less sensitive!"                                 #  attrib.c     level--
+
+#  - wisdom
+MSGTYPE=stop "You feel wise!"                                           #  attrib.c     a_wis++
+MSGTYPE=stop "You feel very wise!"                                      #  attrib.c     a_wis++ (>1)
+MSGTYPE=stop "You feel foolish!"                                        #  attrib.c     a_wis--
+MSGTYPE=stop "You feel very foolish!"                                   #  attrib.c     a_wis-- (>1)
+MSGTYPE=stop "You must have been very observant."                       #  attrib.c     exe_wis
+MSGTYPE=stop "You haven't been paying attention."                       #  attrib.c     abu_wis
+
+##########################################################################################################
