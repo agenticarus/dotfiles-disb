@@ -2,17 +2,33 @@
 	name = Mike Cripps
 	email = mike.cripps@footballradar.com
 [color]
-	diff = auto
-	status = auto
-	branch = auto
-	ui = auto
-[alias]
-	co = checkout
-	graph = log --graph --decorate --all
-	addp = add --patch
-	logdiff = log --patch
-	branches = branch -v
+	ui = true
+[branch]
+	autosetupmerge = always
+	autosetuprebase = always
+[merge]
+	tool = extMerge
+	stat = true
+[mergetool "extMerge"]
+	cmd = /Users/mikecripps/bin/extMerge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+[mergetool]
+	trustExitCode = false
+[diff]
+	external = extDiff
+	mnemonicprefix = true
+	renames = copies
+[credential]
+	helper = osxkeychain
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/mikecripps/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 [push]
 	default = nothing
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %an)%Creset' --abbrev-commit --date=relative -15
+	up = "!git remote update -p; git merge --ff-only @{u}"
