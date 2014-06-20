@@ -5,6 +5,7 @@ set noautoindent
 set nocompatible
 set nobackup
 set pastetoggle=<F11>
+set relativenumber
 set ruler
 syntax on
 filetype plugin on
